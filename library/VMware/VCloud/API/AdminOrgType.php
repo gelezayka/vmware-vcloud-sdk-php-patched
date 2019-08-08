@@ -9,6 +9,8 @@ class VMware_VCloud_API_AdminOrgType extends VMware_VCloud_API_OrgType {
     protected $namespace = array();
     protected $namespacedef = null;
     protected $tagName = null;
+    protected $RoleReferences = null;
+
     public static $defaultNS = 'http://www.vmware.com/vcloud/v1.5';
 
    /**
@@ -29,8 +31,9 @@ class VMware_VCloud_API_AdminOrgType extends VMware_VCloud_API_OrgType {
     * @param VMware_VCloud_API_CatalogsListType $Catalogs - [optional]
     * @param VMware_VCloud_API_VdcsType $Vdcs - [optional]
     * @param VMware_VCloud_API_NetworksType $Networks - [optional]
+    * @param VMware_VCloud_API_RoleReferencesType $RoleReferences - [optional]
     */
-    public function __construct($VCloudExtension=null, $href=null, $type=null, $Link=null, $operationKey=null, $id=null, $name=null, $Description=null, $Tasks=null, $FullName=null, $IsEnabled=null, $Settings=null, $Users=null, $Groups=null, $Catalogs=null, $Vdcs=null, $Networks=null) {
+    public function __construct($VCloudExtension=null, $href=null, $type=null, $Link=null, $operationKey=null, $id=null, $name=null, $Description=null, $Tasks=null, $FullName=null, $IsEnabled=null, $Settings=null, $Users=null, $Groups=null, $Catalogs=null, $Vdcs=null, $Networks=null, $RoleReferences = null) {
         parent::__construct($VCloudExtension, $href, $type, $Link, $operationKey, $id, $name, $Description, $Tasks, $FullName, $IsEnabled);
         $this->Settings = $Settings;
         $this->Users = $Users;
@@ -38,6 +41,7 @@ class VMware_VCloud_API_AdminOrgType extends VMware_VCloud_API_OrgType {
         $this->Catalogs = $Catalogs;
         $this->Vdcs = $Vdcs;
         $this->Networks = $Networks;
+        $this->RoleReferences = $RoleReferences;
         $this->tagName = 'AdminOrg';
         $this->namespacedef = ' xmlns:vcloud="http://www.vmware.com/vcloud/v1.5" xmlns:ns12="http://www.vmware.com/vcloud/v1.5" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1" xmlns:ovfenv="http://schemas.dmtf.org/ovf/environment/1" xmlns:vmext="http://www.vmware.com/vcloud/extension/v1.5" xmlns:cim="http://schemas.dmtf.org/wbem/wscim/1/common" xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:vssd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_VirtualSystemSettingData" xmlns:vmw="http://www.vmware.com/schema/ovf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"';
     }
@@ -74,8 +78,14 @@ class VMware_VCloud_API_AdminOrgType extends VMware_VCloud_API_OrgType {
     public function getNetworks() {
         return $this->Networks;
     }
+    public function getRoleReferences() {
+        return $this->RoleReferences;
+    }
     public function setNetworks($Networks) { 
         $this->Networks = $Networks;
+    }
+    public function setRoleReferences($RoleReferences) {
+        $this->RoleReferences = $RoleReferences;
     }
     public function get_tagName() { return $this->tagName; }
     public function set_tagName($tagName) { $this->tagName = $tagName; }
@@ -135,6 +145,9 @@ class VMware_VCloud_API_AdminOrgType extends VMware_VCloud_API_OrgType {
         if (!is_null($this->Networks)) {
             $out = $this->Networks->export('Networks', $out, $level, '', $namespace, $rootNS);
         }
+        if (!is_null($this->RoleReferences)) {
+            $out = $this->RoleReferences->export('RoleReferences', $out, $level, '', $namespace, $rootNS);
+        }
         return $out;
     }
     protected function hasContent() {
@@ -145,6 +158,7 @@ class VMware_VCloud_API_AdminOrgType extends VMware_VCloud_API_OrgType {
             !is_null($this->Catalogs) ||
             !is_null($this->Vdcs) ||
             !is_null($this->Networks) ||
+            !is_null($this->RoleReferences) ||
             parent::hasContent()
             ) {
             return true;
@@ -225,6 +239,15 @@ class VMware_VCloud_API_AdminOrgType extends VMware_VCloud_API_OrgType {
             $this->setVdcs($obj);
             if (!empty($namespace)) {
                 $this->namespace['Vdcs'] = $namespace;
+            }
+        }
+        elseif ($child->nodeType == XML_ELEMENT_NODE && $nodeName == 'RoleReferences') {
+            $obj = new VMware_VCloud_API_RoleReferencesType();
+            $obj->build($child);
+            $obj->set_tagName('RoleReferences');
+            $this->setRoleReferences($obj);
+            if (!empty($namespace)) {
+                $this->namespace['RoleReferences'] = $namespace;
             }
         }
         elseif ($child->nodeType == XML_ELEMENT_NODE && $nodeName == 'Networks') {
